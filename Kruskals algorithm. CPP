@@ -1,0 +1,94 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+
+    int n, e;
+
+    cout << "Enter number of vertices: ";
+    cin >> n;
+
+    cout << "Enter number of edges: ";
+    cin >> e;
+
+
+    int edges[20][3];
+
+    cout << "Enter edges (vertex1 vertex2 weight):\n";
+
+    for (int i = 0; i < e; i++) {
+        cin >> edges[i][0] >> edges[i][1] >> edges[i][2];
+    }
+
+   
+    for (int i = 0; i < e - 1; i++) {
+        for (int j = 0; j < e - i - 1; j++) {
+
+            if (edges[j][2] > edges[j + 1][2]) {
+
+               
+                int temp = edges[j][0];
+                edges[j][0] = edges[j + 1][0];
+                edges[j + 1][0] = temp;
+
+               
+                temp = edges[j][1];
+                edges[j][1] = edges[j + 1][1];
+                edges[j + 1][1] = temp;
+
+               
+                temp = edges[j][2];
+                edges[j][2] = edges[j + 1][2];
+                edges[j + 1][2] = temp;
+            }
+        }
+    }
+
+    int parent[20];
+
+   
+    for (int i = 0; i < n; i++) {
+        parent[i] = i;
+    }
+
+    int total = 0;
+    int count = 0;
+
+    cout << "\nEdges in MST:\n";
+
+   
+    for (int i = 0; i < e && count < n - 1; i++) {
+
+        int u = edges[i][0];
+        int v = edges[i][1];
+        int weight = edges[i][2];
+
+       
+        int parentU = u;
+        while (parent[parentU] != parentU) {
+            parentU = parent[parentU];
+        }
+
+       
+        int parentV = v;
+        while (parent[parentV] != parentV) {
+            parentV = parent[parentV];
+        }
+
+       
+        if (parentU != parentV) {
+
+            cout << u << " - " << v << " = " << weight << endl;
+
+            total = total + weight;
+            count++;
+
+           
+            parent[parentU] = parentV;
+        }
+    }
+
+    cout << "\nTotal cost = " << total << endl;
+
+    return 0;
+}
